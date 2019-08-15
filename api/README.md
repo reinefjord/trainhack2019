@@ -2,7 +2,7 @@
 
 ## GetStopsAlongRoute
 
-Retrieves a list of stopts along a given train route suitible for rendering to
+Retrieves a list of stops along a given train route suitible for rendering to
 a user by a client.
 
 ```ts
@@ -41,6 +41,7 @@ interface Stop {
 
 ## GetAlternativeRoutes
 
-Retrieves a list of alternative routes from the specified stop to the given destination.
+Retrieves a list of alternative routes from the specified stop to the given
+destination.
 
 
