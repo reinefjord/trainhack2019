@@ -1,0 +1,44 @@
+.Route {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.Stop {
+    display: flex;
+    flex-direction: row;
+    margin: 1em;
+    align-items: center;
+}
+
+.StopName {
+    margin: 0 1em;
+    text-align: right;
+}
+
+.Blob {
+    box-sizing: border-box;
+    background: #ccc;
+    border: 3px solid #999;
+    border-radius: 50%;
+    height: 2em;
+    width: 2em;
+    z-index: 1;
+    position: relative;
+}
+
+.Stop:not(:first-child) .Blob::before {
+    background-image: linear-gradient(transparent, #999);
+    content: "";
+    display: block;
+    position: absolute;
+    right: calc(50% - 2px);
+    bottom: 100%;
+    height: 2.5em;
+    width: 4px;
+    z-index: 0;
+}
+
+.AlternativeInfo {
+    width: 10em;
+}
