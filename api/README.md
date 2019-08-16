@@ -9,15 +9,6 @@ a user by a client.
 interface RouteRequest {
   // I don't know, whatever.
   trainNumber?: string;
-
-  // The timestamp of departure with the train number.
-  departureTime: number;
-
-  // The identifier for the origin of the trip.
-  origin: string;
-
-  // Some identifier for the destination.
-  destination: string;
 }
 ```
 
@@ -32,10 +23,14 @@ interface Stop {
   name: string;
 
   // The timestamp of arrival at the stop.
-  arrivalTime: number;
+  arrivalTime: string;
 
   // The timestamp of departure from the stop.
-  departureTime: number;
+  departureTime?: string;
+
+  coords: {lat: number, long: number};
+
+
 }
 ```
 

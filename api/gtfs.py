@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.types import DECIMAL, TIME, DATE
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 
@@ -28,8 +27,8 @@ class Stop(Base):
 
     stop_id = Column(Integer, primary_key=True)
     stop_name = Column(String)
-    stop_lat = Column(DECIMAL(8, 6))
-    stop_lon = Column(DECIMAL(8, 6))
+    stop_lat = Column(Float)
+    stop_lon = Column(Float)
 
     stop_times = relationship("StopTime", back_populates="stop")
 
@@ -58,6 +57,7 @@ class Trip(Base):
     service_id = Column(Integer)
 
     route = relationship("Route", back_populates='trips')
+    stop_times = relationship("StopTime", back_populates='trip')
 
 
 class StopTime(Base):
@@ -73,6 +73,7 @@ class StopTime(Base):
     drop_off_type = Column(Integer)
 
     stop = relationship("Stop", back_populates='stop_times')
+    trip = relationship("Trip", back_populates='stop_times')
 
 
 class Calendar(Base):
@@ -167,5 +168,5 @@ def populate_all():
         print(file)
         populate_table(*file)
 
-Base.metadata.create_all(engine)
-populate_all()
+#Base.metadata.create_all(engine)
+#populate_all()

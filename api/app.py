@@ -1,91 +1,70 @@
-
 from datetime import datetime
 from datetime import timedelta
 import tornado.ioloop
 import tornado.web
 import json
 import resrobot
+import gtfs
 
 from collections import deque
-
-cache = [
-    {
-        'type': "resrobotv1",
-        'params': {'from': 'Stockholm', 'to': 'Göteborg'},
-        'timestamp': datetime.now().isoformat(),
-        'response': ['Rutt1', 'Rutt2'],
-    },
-    {
-        'type': "resrobotv1",
-        'params': {'from': 'Stockholm', 'to': 'Malmö'},
-        'timestamp': datetime.now().isoformat(),
-        'response': ['Rutt1', 'Rutt2'],
-    },
-]
 
 def format_json(data):
     return json.dumps(data, indent=4, sort_keys=True)
 
-class BaseHandler(tornado.web.RequestHandler):
 
+class BaseHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         print("setting headers!!!")
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with")
         self.set_header('Access-Control-Allow-Methods', ' PUT, DELETE, OPTIONS')
+        self.set_header('Content-Type', 'application/json')
 
     def options(self):
         # no body
         self.set_status(204)
         self.finish()
-class Stop:
-    def __init__(self, id, name, arrivaltime, departuretime):
-        self.id = id
-        self.name = name
-        self.arrivaltime = arrivaltime
-        self.departuretime = departuretime
 
-    def to_json(self):
-        data = {
-            'id':           self.id,
-            'name':         self.name,
-            'arrivaltime':  self.arrivaltime.isoformat(),
-            'departuretime':self.departuretime.isoformat()
-        }
-        return data
 
 class MainHandler(BaseHandler):
     def get(self):
         self.write("Hello, world!\n")
 
+
 class GetStopsAlongRouteHandler(tornado.web.RequestHandler):
     def get(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        data = {'data':[]}
-        stop1 = Stop(
-            id=123,
-            name="Stockholm",
-            arrivaltime = datetime.now(),
-            departuretime = datetime.now()+timedelta(minutes=10)
-        )
-        stop2 = Stop(
-            id=456,
-            name="Hässleholm",
-            arrivaltime = datetime.now()+timedelta(hours=1),
-            departuretime = datetime.now()+timedelta(hours=1, minutes=10)
-        )
-        stop3 = Stop(
-            id=789,
-            name="Malmö",
-            arrivaltime = datetime.now()+timedelta(hours=2),
-            departuretime = datetime.now()+timedelta(hours=2, minutes=10)
-        )
+        train_number = self.get_query_argument('trainNumber')
+        trip = gtfs.session.query(gtfs.Trip).filter_by(trip_short_name=train_number).first()
+        stop_times = trip.stop_times
+        stop_times.sort(key=lambda x: int(x.departure_time.split(':')[0]))
 
-        data['data'].append(stop1.to_json())
-        data['data'].append(stop2.to_json())
-        data['data'].append(stop3.to_json())
+        now = datetime.now().date()
 
-        self.write(data)
+        data = []
+        for stop_time in stop_times:
+            arrival = [int(n) for n in stop_time.arrival_time.split(':')]
+            departure = [int(n) for n in stop_time.departure_time.split(':')]
+
+            arrival_td = timedelta(hours=arrival[0], minutes=arrival[1], seconds=arrival[2])
+            departure_td = timedelta(hours=departure[0], minutes=departure[1], seconds=departure[2])
+
+            arrival_iso = (datetime(now.year, now.month, now.day) + arrival_td).isoformat()
+            departure_iso = (datetime(now.year, now.month, now.day) + departure_td).isoformat()
+
+            data.append(
+                {
+                    'name': stop_time.stop.stop_name,
+                    'coords': {
+                        'lat': stop_time.stop.stop_lat,
+                        'long': stop_time.stop.stop_lon
+                    },
+                    'arrivalTime': arrival_iso,
+                    'departureTime': departure_iso
+                }
+            )
+
+        self.write(format_json(data))
+
 
 class GetAlternativeRoutesHandler(BaseHandler):
     def get(self):
@@ -109,6 +88,7 @@ def make_app():
 if __name__ == "__main__":
     app = make_app()
     app.listen(1337)
+    print("Hej.")
     tornado.ioloop.IOLoop.current().start()
 
 
