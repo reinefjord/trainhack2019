@@ -14,7 +14,6 @@ def format_json(data):
 
 class BaseHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
-        print("setting headers!!!")
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with")
         self.set_header('Access-Control-Allow-Methods', ' PUT, DELETE, OPTIONS')
@@ -31,10 +30,15 @@ class MainHandler(BaseHandler):
         self.write("Hello, world!\n")
 
 
-class GetStopsAlongRouteHandler(tornado.web.RequestHandler):
+class GetStopsAlongRouteHandler(BaseHandler):
     def get(self):
         train_number = self.get_query_argument('trainNumber')
         trip = gtfs.session.query(gtfs.Trip).filter_by(trip_short_name=train_number).first()
+
+        if not trip:
+            self.send_error(404)
+            return
+
         stop_times = trip.stop_times
         stop_times.sort(key=lambda x: int(x.departure_time.split(':')[0]))
 
@@ -76,7 +80,10 @@ class GetAlternativeRoutesHandler(BaseHandler):
                 self.get_query_argument('dest_long'))
 
         results = resrobot.search_routes(when, origin, dest)
-        self.write(results)
+        if results:
+            self.write(results)
+        else:
+            self.send_error(502)
 
 def make_app():
     return tornado.web.Application([

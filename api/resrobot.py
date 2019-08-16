@@ -6,7 +6,10 @@ from pprint import pprint
 def _do_get(endpoint, query):
     query['key'] = config.resrobot_reseplanerare
     query['format'] = 'json'
-    r = requests.get('https://api.resrobot.se/v2/' + endpoint, params=query)
+    try:
+        r = requests.get('https://api.resrobot.se/v2/' + endpoint, params=query)
+    except:
+        return False
     return r.json()
 
 def search_routes(when: datetime, origin, dest):
