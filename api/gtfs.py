@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.types import DECIMAL, TIME
+from sqlalchemy.types import DECIMAL, TIME, DATE
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 
-engine = create_engine('sqlite:///:memory:', echo=True)
+engine = create_engine('sqlite:///db.sqlite')
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -63,9 +63,10 @@ class Trip(Base):
 class StopTime(Base):
     __tablename__ = 'stop_times'
 
-    trip_id = Column(Integer, ForeignKey('trips.trip_id'), primary_key=True)
-    arrival_time = Column(TIME)
-    departure_time = Column(TIME)
+    id = Column(Integer, primary_key=True)
+    trip_id = Column(Integer, ForeignKey('trips.trip_id'))
+    arrival_time = Column(String)
+    departure_time = Column(String)
     stop_id = Column(Integer, ForeignKey('stops.stop_id'))
     stop_sequence = Column(Integer)
     pickup_type = Column(Integer)
@@ -111,39 +112,50 @@ class Transfer(Base):
     to_trip_id = Column(Integer, ForeignKey('trips.trip_id'))
 
 
-def populate_table(filename, table_cls, func):
+def populate_table(filename, table_cls):
     import csv
 
-    rows = []
-    with open(filename) as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            rows.append(row)
+    def csv_reader(filename):
+        with open(filename) as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                yield row
 
-    fields = rows.pop(0)
-    for row in rows:
+    csvr = csv_reader(filename)
+
+    fields = next(csvr)
+    for i, row in enumerate(csvr):
         t = table_cls()
-        for i, field in enumerate(fields):
-            func(t, field, row[i])
+        for j, field in enumerate(fields):
+            value = row[j]
+            if field in ('monday', 'tuesday', 'wednesday', 'thursday',
+                         'friday', 'saturday', 'sunday', 'exception_type'):
+                if value:
+                    value = bool(int(value))
+                else:
+                    value = None
+
+            if field.endswith('_id') or field.endswith('_type') or field.endswith('_sequence'):
+                if value:
+                    value = int(value)
+                else:
+                    value = None
+
+            setattr(t, field, value)
         session.add(t)
+
+        if i > 0 and not i%1E5:
+            print('Commiting...')
+            session.commit()
 
     session.commit()
 
-def default(t, field, value):
-    setattr(t, field, value)
-
-def calendar(t, field, value):
-    if field in ('monday', 'tuesday', 'wednesday', 'thursday',
-                 'friday', 'saturday', 'sunday', 'exception_type'):
-        value = bool(int(value))
-
-    setattr(t, field, value)
 
 def populate_all():
     files = [
-        ('agency.txt', Agency, default),
-        ('calendar_dates.txt', CalendarDate, default),
-        ('calendar.txt', Calendar, calendar),
+        ('agency.txt', Agency),
+        ('calendar_dates.txt', CalendarDate),
+        ('calendar.txt', Calendar),
         ('routes.txt', Route),
         ('stops.txt', Stop),
         ('stop_times.txt', StopTime),
@@ -152,6 +164,7 @@ def populate_all():
     ]
 
     for file in files:
+        print(file)
         populate_table(*file)
 
 Base.metadata.create_all(engine)
