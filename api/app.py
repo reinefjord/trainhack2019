@@ -78,7 +78,7 @@ class GetAlternativeRoutesHandler(tornado.web.RequestHandler):
     def get(self):
         data = {"message": "nothing to se here"}
 
-        self.writ(format_json(data))
+        self.write(format_json(data))
 
 def make_app():
     return tornado.web.Application([
