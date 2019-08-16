@@ -44,4 +44,23 @@ interface Stop {
 Retrieves a list of alternative routes from the specified stop to the given
 destination.
 
+```
+ interface AlternativeRouteRequest {
+    // ISO date time string representing earliest allowed departure time
+    departure_time: string;
+    
+    // Latitude of origin location
+    origin_lat: float;
 
+    // Latitude of origin location
+    origin_long: float;
+    
+    // Latitude of destination location
+    dest_lat: float;
+
+    // Latitude of destination location
+    dest_long: float;
+ }
+```
+
+The response is specified in [the ResRobot API documentation](https://www.trafiklab.se/api/resrobot-reseplanerare/sok-resa).
