@@ -5,6 +5,23 @@ import tornado.ioloop
 import tornado.web
 import json
 
+from collections import deque
+
+cache = [
+    {
+        'type': "resrobotv1",
+        'params': {'from': 'Stockholm', 'to': 'Göteborg'},
+        'timestamp': datetime.now().isoformat(),
+        'response': ['Rutt1', 'Rutt2'],
+    },
+    {
+        'type': "resrobotv1",
+        'params': {'from': 'Stockholm', 'to': 'Malmö'},
+        'timestamp': datetime.now().isoformat(),
+        'response': ['Rutt1', 'Rutt2'],
+    },
+]
+
 def format_json(data):
     return json.dumps(data, indent=4, sort_keys=True)
 
