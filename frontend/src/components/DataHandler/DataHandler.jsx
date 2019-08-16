@@ -25,10 +25,10 @@ export default class DataHandler extends React.Component {
       isFetchingRoute: true
     });
 
-    const res = await client.getStopsAlongRoute(trainId);
+    const {stops} = await client.getStopsAlongRoute(trainId);
 
     this.setState({
-      ...res,
+      stops,
       isFetchingRoute: false
     });
   }

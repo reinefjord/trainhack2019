@@ -5,25 +5,26 @@ export const baseTrip = {
     {
       id: 0,
       name: 'Stockholm C',
-      departureTime: Date.now(),
+      coords: {lat: 59.3293, long: 18.0686},
+      departureTime: new Date(Date.now()),
     },
     {
       id: 1,
       name: 'Alvesta',
-      departureTime: Date.now() + 134531,
+      coords: {lat: 56.8992, long: 14.556},
+      departureTime: new Date(Date.now() + 134531),
     },
     {
       id: 2,
       name: 'Malmo',
-      departureTime: Date.now() + 164513,
+      coords: {lat: 55.605, long: 13.0038},
+      departureTime: new Date(Date.now() + 164513),
     },
   ]
 };
 
 const routes = new Map()
-    .set(1, [
-       
-    ]);
+    .set('56.8992,14.556', [null, null]);
 
 /**
  * A FakeClient implements the RoutesBackendClient interface with fake data.
@@ -33,7 +34,7 @@ export class FakeClient {
     return Promise.resolve(baseTrip);
   }
 
-  getAlternativeRoutes(request) {
-    return Promise.resolve(routes.get(request.id) || []);
+  getAlternativeRoutes(origin) {
+    return Promise.resolve(routes.get(`${origin.lat},${origin.long}`) || []);
   }
 }

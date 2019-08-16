@@ -6,11 +6,11 @@ const time = new Intl.DateTimeFormat(undefined, {
   timeStyle: "short"
 });
 
-function Stop(stop) {
+function Stop({stop, destination, active, onClick, children}) {
   return (
     <div
-      onClick={stop.onClick}
-      className={`Stop ${stop.active ? "active" : ""}`}
+      onClick={onClick}
+      className={`Stop ${active ? "active" : ""}`}
       key="id"
     >
       <div className="StopName">
@@ -20,8 +20,8 @@ function Stop(stop) {
       <div className="VerticalAlignMiddle">
         <div className="Blob" />
       </div>
-      <AlternativeRouteInfo {...stop} />
-      {stop.children}
+      {destination && <AlternativeRouteInfo stop={stop} destination={destination} />}
+      {children}
     </div>
   );
 }
@@ -29,10 +29,11 @@ function Stop(stop) {
 export default class Route extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { stops: [...props.stops], acitve: null };
+    this.state = { stops: [...props.stops], active: null };
 
     this.onClick = this.onClick.bind(this);
   }
+
   onClick(number) {
     if (number === this.state.active) {
       this.setState({ active: null });
@@ -42,21 +43,25 @@ export default class Route extends React.Component {
   }
 
   render() {
+    const stops = [...this.state.stops];
+    const destination = stops.pop();
     return (
       <div className="Route">
-        {this.state.stops.map((stop, i) => (
+        {stops.map((stop, i) => (
           <Stop
             key={stop.id}
-            {...stop}
+            stop={stop}
+            destination={destination}
             onClick={e => this.onClick(i)}
             active={this.state.active === i}
           >
             {i ? <div className="VerticalBarTop" /> : null}
-            {i === this.state.stops.length - 1 ? null : (
-              <div className="VerticalBarBottom" />
-            )}
+            <div className="VerticalBarBottom" />
           </Stop>
         ))}
+        <Stop stop={destination}>
+          <div className="VerticalBarTop" />
+        </Stop>
       </div>
     );
   }
@@ -73,8 +78,8 @@ class AlternativeRouteInfo extends React.Component {
   };
 
   componentDidMount() {
-    client
-      .getAlternativeRoutes(this.props)
+    const {stop, destination} = this.props;
+    client.getAlternativeRoutes(stop.coords, destination.coords, stop.arrivalTime || stop.departureTime)
       .then(
         alternatives => this.setState({ alternatives }),
         error => this.setState({ error })

@@ -14,10 +14,23 @@ class Client {
 
   getStopsAlongRoute(request) {
     return fetch(`${this.host}/GetStopsAlongRoute`)
-      .then(res => res.json());
+      .then(res => res.json())
+      .then(obj => {
+        const stops = obj.data;
+        return { stops };
+      });
   }
 
-  getAlternativeRoutes(request) {
-    return Promise.reject(new Error('getAlternativeRoutes unimplemented'));
+  getAlternativeRoutes(origin, dest, time) {
+    const query = new URLSearchParams({
+      'departure_time': time.toISOString(),
+      'origin_lat': origin.lat,
+      'origin_long': origin.long,
+      'dest_lat': dest.lat,
+      'dest_long': dest.long,
+    });
+    return fetch(`${this.host}/GetAlternativeRoutes?${query}`)
+      .then(res => res.json())
+      .then(({Trip}) => Trip);
   }
 }
