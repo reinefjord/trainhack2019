@@ -1,14 +1,11 @@
 import React from "react";
+import "./FindTrain.css";
 
 export default class FindTrain extends React.Component {
   constructor() {
     super();
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-  }
-
-  onChange(e) {
-    console.log(e.target.value);
   }
 
   onSubmit(e) {
@@ -21,8 +18,8 @@ export default class FindTrain extends React.Component {
       <>
         <form onSubmit={this.onSubmit}>
           <input
+            className="InputField"
             placeholder="Find your trip with the train id!"
-            onChange={this.onChange}
           />
         </form>
         {this.props.loading ? <div>Fetching data...</div> : ""}
