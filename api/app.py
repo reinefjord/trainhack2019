@@ -35,7 +35,7 @@ class Stop:
 
     def to_json(self):
         data = {
-            'id':           str(self.id),
+            'id':           self.id,
             'name':         self.name,
             'arrivaltime':  self.arrivaltime.isoformat(),
             'departuretime':self.departuretime.isoformat()
@@ -72,39 +72,19 @@ class GetStopsAlongRouteHandler(tornado.web.RequestHandler):
         data.append(stop2.to_json())
         data.append(stop3.to_json())
 
-        self.write(format_json([
-            
-        ]))
+        self.write(format_json(data))
 
 class GetAlternativeRoutesHandler(tornado.web.RequestHandler):
     def get(self):
         data = {"message": "nothing to se here"}
 
-@app.route("/GetStopsAlongRoute")
-def getStopsAlongRoute():
-    stop1 = Stop(
-        id=123,
-        name="Stockholm",
-        arrivaltime = datetime.now(),
-        departuretime = datetime.now()+timedelta(minutes=10)
-    )
-    stop2 = Stop(
-        id=456,
-        name="Hässleholm",
-        arrivaltime = datetime.now()+timedelta(hours=1),
-        departuretime = datetime.now()+timedelta(hours=1, minutes=10)
-    )
-    stop3 = Stop(
-        id=789,
-        name="Malmö",
-        arrivaltime = datetime.now()+timedelta(hours=2),
-        departuretime = datetime.now()+timedelta(hours=2, minutes=10)
-    )
+        self.writ(format_json(data))
 
-    return format_json([
-        stop1.to_json(),
-        stop2.to_json(),
-        stop3.to_json(),
+def make_app():
+    return tornado.web.Application([
+        (r"/", MainHandler),
+        (r"/GetStopsAlongRoute", GetStopsAlongRouteHandler),
+        (r"/GetAlternativeRoutes", GetAlternativeRoutesHandler),
     ])
 
 if __name__ == "__main__":
