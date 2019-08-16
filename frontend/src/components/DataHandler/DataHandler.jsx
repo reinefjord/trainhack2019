@@ -1,4 +1,5 @@
 import React from "react";
+import { client } from "../../routes_backend/client";
 
 export default class DataHandler extends React.Component {
   constructor(props) {
@@ -10,40 +11,32 @@ export default class DataHandler extends React.Component {
         origin: "Stockholm",
         destination: "Malmö"
       },
-      stops: [
-        {
-          id: "0",
-          name: "Stockholm C",
-          departureTime: Date.now()
-        },
-        {
-          id: 1,
-          name: "Alvesta",
-          departureTime: Date.now() + 134531
-        },
-        {
-          id: 2,
-          name: "Malmo",
-          departureTime: Date.now() + 164513
-        }
-      ],
+      stops: [],
       isFetchingRoute: false
     };
+
+    this.fetchRoute = this.fetchRoute.bind(this);
   }
 
-  fetchRoute(trainId) {
+  async fetchRoute(trainId) {
+    console.log("Fetching route", trainId);
+
     this.setState({
       isFetchingRoute: true
     });
 
-    // this.setState({
-    //   route: await fetch(...)
-    // })
+    const res = await client.getStopsAlongRoute(trainId);
+
+    this.setState({
+      ...res,
+      isFetchingRoute: false
+    });
   }
 
   render() {
+    const { fetchRoute } = this;
     const { children } = this.props;
-    const { train, stops } = this.state;
-    return <>{children({ train, stops })}</>;
+    const { train, stops, isFetching } = this.state;
+    return <>{children({ train, stops, loading: isFetching, fetchRoute })}</>;
   }
 }

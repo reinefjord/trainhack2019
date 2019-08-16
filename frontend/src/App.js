@@ -10,12 +10,12 @@ function App(){
         <header className="App-header">
 
           <DataHandler>
-            {({train, stops}) => (
+            {({train, stops, loading, fetchRoute}) => (
             <>
-              <FindTrain />
-              <span>{train.origin} to {train.destination}</span>
+              <FindTrain onSubmit={fetchRoute} loading={loading}/>
 
-              <Route stops={stops}/>
+              { stops.length ? <><span>{train.origin} to {train.destination}</span><Route stops={stops}/> </>: null}
+             
               </>
             )}
           </DataHandler>

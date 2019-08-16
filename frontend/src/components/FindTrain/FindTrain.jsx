@@ -3,12 +3,6 @@ import React from "react";
 export default class FindTrain extends React.Component {
   constructor() {
     super();
-
-    this.state = {
-      sendingRequest: false,
-      error: ""
-    };
-
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -19,18 +13,20 @@ export default class FindTrain extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    this.setState({
-      sendingRequest: true
-    });
+    this.props.onSubmit(e.target.value);
   }
 
   render() {
-    const { sendingRequest } = this.state;
     return (
-      <form onSubmit={this.onSubmit}>
-        <input placeholder="Train id" onChange={this.onChange} />
-        {sendingRequest ? "Fetching data..." : ""}
-      </form>
+      <>
+        <form onSubmit={this.onSubmit}>
+          <input
+            placeholder="Find your trip with the train id!"
+            onChange={this.onChange}
+          />
+        </form>
+        {this.props.loading ? <div>Fetching data...</div> : ""}
+      </>
     );
   }
 }
