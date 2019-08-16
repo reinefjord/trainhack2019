@@ -7,6 +7,15 @@ export function installClient(host) {
   client = new Client(host);
 }
 
+export function transformAlternatives({Trip}) {
+  return Trip.map((trip) => {
+    const legs = trip.LegList.Leg;
+    const {date, time} = legs[legs.length - 1].Destination;
+    const arrivalTime = Date.parse(`${date} ${time} GMT+0200`);
+    return {arrivalTime}; 
+  });
+}
+
 class Client {
   constructor(host) {
     this.host = host;
@@ -31,6 +40,6 @@ class Client {
     });
     return fetch(`${this.host}/GetAlternativeRoutes?${query}`)
       .then(res => res.json())
-      .then(({Trip}) => Trip);
+      .then(transformAlternatives);
   }
 }

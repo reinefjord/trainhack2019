@@ -97,18 +97,19 @@ class AlternativeRouteInfo extends React.Component {
 
     const {arrivalTime, departureTime} = this.props.destination;
     const endOriginalTime = (arrivalTime || departureTime).getTime();
-    const endTimes = this.state.alternatives.map((trip) => {
-      const {date, time} = trip.Destination;
-      return Date.parse(`${date} ${time} GMT+0200`);
-    });
-    const end = Math.min(...endTimes);
+    const endTimes = this.state.alternatives
+      .map(({arrivalTime}) => arrivalTime - endOriginalTime)
+      .map(t => Math.round(t / 60000));
+
+    const best = Math.min(Infinity, ...endTimes);
+    const worst = Math.max(0, ...endTimes);
 
     return (
       <div className="Minutes">
         <p>
           {alternatives(this.state.alternatives.length)}
         </p>
-        {!this.state.alternatives.length ? null : <p>{Math.round((end - endOriginalTime) / 60000)} mins delay.</p>}
+        {!this.state.alternatives.length ? null : <p>{best} ~ {worst} mins delay.</p>}
       </div>
     );
   }

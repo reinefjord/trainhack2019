@@ -1,3 +1,4 @@
+import { transformAlternatives } from "./client";
 
 const start = Date.parse('2017-08-23 11:31:00 GMT+0200');
 
@@ -7,19 +8,19 @@ export const baseTrip = {
     {
       id: 0,
       name: 'Stockholm C',
-      coords: {lat: 59.3293, long: 18.0686},
+      coords: { lat: 59.3293, long: 18.0686 },
       departureTime: new Date(start),
     },
     {
       id: 1,
       name: 'Alvesta',
-      coords: {lat: 56.8992, long: 14.556},
+      coords: { lat: 56.8992, long: 14.556 },
       departureTime: new Date(start + 134531),
     },
     {
       id: 2,
       name: 'Malmo',
-      coords: {lat: 55.605, long: 13.0038},
+      coords: { lat: 55.605, long: 13.0038 },
       departureTime: new Date(start + 164513),
     },
   ]
@@ -31,18 +32,33 @@ function date(d) {
 }
 
 const routes = new Map()
-    .set('56.8992,14.556', [
-      {
-        Destination: {
-          ...date(new Date(start + 434513)),
-        },
+  .set('56.8992,14.556', [
+    {
+      LegList: {
+        Leg: [
+          null,
+          null,
+          {
+            Destination: {
+              ...date(new Date(start + 434513)),
+            },
+          },
+        ],
       },
-      {
-        Destination: {
-          ...date(new Date(start + 674513)),
-        },
+    },
+    {
+      LegList: {
+        Leg: [
+          null,
+          {
+            Destination: {
+              ...date(new Date(start + 674513)),
+            },
+          },
+        ],
       },
-    ]);
+    },
+  ]);
 
 /**
  * A FakeClient implements the RoutesBackendClient interface with fake data.
@@ -53,6 +69,7 @@ export class FakeClient {
   }
 
   getAlternativeRoutes(origin) {
-    return Promise.resolve(routes.get(`${origin.lat},${origin.long}`) || []);
+    return Promise.resolve(
+      transformAlternatives({ Trip: routes.get(`${origin.lat},${origin.long}`) || [] }));
   }
 }
