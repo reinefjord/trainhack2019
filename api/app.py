@@ -58,6 +58,12 @@ def getStopsAlongRoute():
 
     return format_json(data)
 
+@app.route("/GetAlaternativeRoute")
+def getAlternativeRoute():
+    data = {"message": "nothing to se here"}
+
+    return format_json(data)
+
 if __name__ == "__main__":
     app.run(debug=True, port=1337)
 
