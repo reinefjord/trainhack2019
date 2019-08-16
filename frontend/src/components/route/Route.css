@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: flex-end;
   position: relative;
+  margin-right: 25%;
 }
 
 .Stop {

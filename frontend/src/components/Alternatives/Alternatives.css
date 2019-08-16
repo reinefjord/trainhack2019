@@ -1,0 +1,16 @@
+.AlternativeContainer {
+  width: 400px;
+  position: absolute;
+  background-color: #ebebe3;
+  top: 0;
+}
+
+.Alternative {
+  border: 1px solid #999;
+  padding: 5px;
+}
+
+.Alternative p {
+  margin: 0;
+  font-weight: bold;
+}

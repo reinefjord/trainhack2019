@@ -1,12 +1,13 @@
 import React from "react";
 import "./Route.css";
 import { client } from "../../routes_backend/client.js";
+import { Alternatives } from "../Alternatives/Alternatives";
 
 const time = new Intl.DateTimeFormat(undefined, {
   timeStyle: "short"
 });
 
-function Stop({stop, destination, active, onClick, children}) {
+function Stop({ stop, destination, active, onClick, children }) {
   return (
     <div
       onClick={onClick}
@@ -15,12 +16,18 @@ function Stop({stop, destination, active, onClick, children}) {
     >
       <div className="StopName">
         <div>{stop.name}</div>
-        <div className="Time">{time.format(stop.departureTime)}</div>
+        <div className="Time">{time.format(new Date(stop.departureTime))}</div>
       </div>
       <div className="VerticalAlignMiddle">
         <div className="Blob" />
       </div>
-      {destination && <AlternativeRouteInfo stop={stop} destination={destination} />}
+      {destination && (
+        <AlternativeRouteInfo
+          stop={stop}
+          destination={destination}
+          active={active}
+        />
+      )}
       {children}
     </div>
   );
@@ -49,7 +56,7 @@ export default class Route extends React.Component {
       <div className="Route">
         {stops.map((stop, i) => (
           <Stop
-            key={stop.id}
+            key={stop.name}
             stop={stop}
             destination={destination}
             onClick={e => this.onClick(i)}
@@ -78,8 +85,13 @@ class AlternativeRouteInfo extends React.Component {
   };
 
   componentDidMount() {
-    const {stop, destination} = this.props;
-    client.getAlternativeRoutes(stop.coords, destination.coords, stop.arrivalTime || stop.departureTime)
+    const { stop, destination } = this.props;
+    client
+      .getAlternativeRoutes(
+        stop.coords,
+        destination.coords,
+        stop.arrivalTime || stop.departureTime
+      )
       .then(
         alternatives => this.setState({ alternatives }),
         error => this.setState({ error })
@@ -95,10 +107,12 @@ class AlternativeRouteInfo extends React.Component {
       return <p className="Minutes">Loading...</p>;
     }
 
-    const {arrivalTime, departureTime} = this.props.destination;
-    const endOriginalTime = (arrivalTime || departureTime).getTime();
+    const { arrivalTime, departureTime } = this.props.destination;
+    const orginialArrivalTime = new Date(
+      arrivalTime || departureTime
+    ).getTime();
     const endTimes = this.state.alternatives
-      .map(({arrivalTime}) => arrivalTime - endOriginalTime)
+      .map(({ arrivalTime }) => arrivalTime - orginialArrivalTime)
       .map(t => Math.round(t / 60000));
 
     const best = Math.min(Infinity, ...endTimes);
@@ -106,11 +120,23 @@ class AlternativeRouteInfo extends React.Component {
 
     return (
       <div className="Minutes">
-        <p>
-          {alternatives(this.state.alternatives.length)}
-        </p>
-        {!this.state.alternatives.length ? null : <p>{best} ~ {worst} mins delay.</p>}
+        <p>{alternatives(this.state.alternatives.length)}</p>
+        {this.props.active && (
+          <Alternatives
+            alternatives={this.state.alternatives}
+            orginialArrivalTime={orginialArrivalTime}
+          />
+        )}
+        {!this.state.alternatives.length ? null : (
+          <p>
+            {best} ~ {worst} mins delay.
+          </p>
+        )}
       </div>
     );
   }
 }
+
+export const msToMin = t => {
+  return Math.round(t / 60000);
+};

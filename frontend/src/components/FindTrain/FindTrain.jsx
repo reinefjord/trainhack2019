@@ -9,7 +9,7 @@ export default class FindTrain extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    this.props.onSubmit(e.target.value);
+    this.props.onSubmit(e.target.trainId.value);
   }
 
   render() {
@@ -17,6 +17,7 @@ export default class FindTrain extends React.Component {
       <>
         <form onSubmit={this.onSubmit}>
           <input
+            name="trainId"
             className="InputField"
             placeholder="Find your trip with the train id!"
           />

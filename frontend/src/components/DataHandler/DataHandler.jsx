@@ -5,12 +5,6 @@ export default class DataHandler extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      train: {
-        trainNumber: "1212ABC",
-        departureTime: Date.now(),
-        origin: "Stockholm",
-        destination: "Malmö"
-      },
       stops: [],
       isFetchingRoute: false
     };
@@ -22,11 +16,11 @@ export default class DataHandler extends React.Component {
     console.log("Fetching route", trainId);
 
     this.setState({
-      isFetchingRoute: true
+      isFetchingRoute: true,
+      stops: []
     });
 
-    const {stops} = await client.getStopsAlongRoute(trainId);
-
+    const { stops } = await client.getStopsAlongRoute(trainId);
     this.setState({
       stops,
       isFetchingRoute: false
@@ -36,7 +30,7 @@ export default class DataHandler extends React.Component {
   render() {
     const { fetchRoute } = this;
     const { children } = this.props;
-    const { train, stops, isFetching } = this.state;
-    return <>{children({ train, stops, loading: isFetching, fetchRoute })}</>;
+    const { stops, isFetching } = this.state;
+    return <>{children({ stops, loading: isFetching, fetchRoute })}</>;
   }
 }
