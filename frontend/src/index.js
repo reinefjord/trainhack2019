@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+// import { installClient } from "./routes_backend/client";
+
+// installClient('http://100.115.92.198:1337');
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
