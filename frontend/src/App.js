@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 import FindTrain from "./components/FindTrain/FindTrain";
 import DataHandler from './components/DataHandler/DataHandler';
 import "./App.css";
@@ -14,7 +13,7 @@ function App(){
             {({train, stops}) => (
             <>
               <FindTrain />
-              <span>{train}</span>
+              <span>{train.origin} to {train.destination}</span>
 
               <Route stops={stops}/>
               </>
