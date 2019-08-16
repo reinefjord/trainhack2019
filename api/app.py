@@ -4,6 +4,7 @@ from datetime import timedelta
 import tornado.ioloop
 import tornado.web
 import json
+import resrobot
 
 from collections import deque
 
@@ -44,7 +45,7 @@ class Stop:
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("Hello, world")
+        self.write("Hello, world!\n")
 
 class GetStopsAlongRouteHandler(tornado.web.RequestHandler):
     def get(self):
@@ -76,9 +77,15 @@ class GetStopsAlongRouteHandler(tornado.web.RequestHandler):
 
 class GetAlternativeRoutesHandler(tornado.web.RequestHandler):
     def get(self):
-        data = {"message": "nothing to se here"}
+        when = datetime.strptime( \
+                self.get_query_argument('departure_time'), "%Y-%m-%dT%H:%M:%S.%fZ")
+        origin = (self.get_query_argument('origin_lat'),
+                self.get_query_argument('origin_long'))
+        dest = (self.get_query_argument('dest_lat'),
+                self.get_query_argument('dest_long'))
 
-        self.write(data)
+        results = resrobot.search_routes(when, origin, dest)
+        self.write(results)
 
 def make_app():
     return tornado.web.Application([
