@@ -25,7 +25,18 @@ cache = [
 def format_json(data):
     return json.dumps(data, indent=4, sort_keys=True)
 
+class BaseHandler(tornado.web.RequestHandler):
 
+    def set_default_headers(self):
+        print("setting headers!!!")
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header('Access-Control-Allow-Methods', ' PUT, DELETE, OPTIONS')
+
+    def options(self):
+        # no body
+        self.set_status(204)
+        self.finish()
 class Stop:
     def __init__(self, id, name, arrivaltime, departuretime):
         self.id = id
@@ -42,12 +53,13 @@ class Stop:
         }
         return data
 
-class MainHandler(tornado.web.RequestHandler):
+class MainHandler(BaseHandler):
     def get(self):
         self.write("Hello, world")
 
 class GetStopsAlongRouteHandler(tornado.web.RequestHandler):
     def get(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
         data = {'data':[]}
         stop1 = Stop(
             id=123,
@@ -74,7 +86,7 @@ class GetStopsAlongRouteHandler(tornado.web.RequestHandler):
 
         self.write(data)
 
-class GetAlternativeRoutesHandler(tornado.web.RequestHandler):
+class GetAlternativeRoutesHandler(BaseHandler):
     def get(self):
         data = {"message": "nothing to se here"}
 
