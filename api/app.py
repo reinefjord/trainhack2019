@@ -48,7 +48,7 @@ class MainHandler(tornado.web.RequestHandler):
 
 class GetStopsAlongRouteHandler(tornado.web.RequestHandler):
     def get(self):
-        data = []
+        data = {'data':[]}
         stop1 = Stop(
             id=123,
             name="Stockholm",
@@ -68,17 +68,17 @@ class GetStopsAlongRouteHandler(tornado.web.RequestHandler):
             departuretime = datetime.now()+timedelta(hours=2, minutes=10)
         )
 
-        data.append(stop1.to_json())
-        data.append(stop2.to_json())
-        data.append(stop3.to_json())
+        data['data'].append(stop1.to_json())
+        data['data'].append(stop2.to_json())
+        data['data'].append(stop3.to_json())
 
-        self.write(format_json(data))
+        self.write(data)
 
 class GetAlternativeRoutesHandler(tornado.web.RequestHandler):
     def get(self):
         data = {"message": "nothing to se here"}
 
-        self.write(format_json(data))
+        self.write(data)
 
 def make_app():
     return tornado.web.Application([
