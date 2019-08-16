@@ -62,3 +62,5 @@ destination.
     dest_long: float;
  }
 ```
+
+The response is specified in [the ResRobot API documentation](https://www.trafiklab.se/api/resrobot-reseplanerare/sok-resa).
