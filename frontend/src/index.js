@@ -3,9 +3,11 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { installClient } from "./routes_backend/client";
 
-installClient("http://192.168.43.205:1337");
+// Connect to the real python backend by uncommenting the lines below,
+// replacing the domain as necessary.
+// import { installClient } from "./routes_backend/client";
+// installClient("http://localhost:4000");
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
