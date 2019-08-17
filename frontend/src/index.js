@@ -5,10 +5,7 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { installClient } from "./routes_backend/client";
 
-// Connect to API_HOST if defined
-if (process.env.API_HOST) {
-  installClient(process.env.API_HOST);
-}
+installClient("https://alge.se/trainhack");
 
 // Connect to a local python backend by uncommenting the lines below,
 // replacing the domain as necessary.
