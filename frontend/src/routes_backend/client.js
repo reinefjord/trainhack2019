@@ -13,9 +13,8 @@ export function transformAlternatives({ Trip }) {
     : Trip.map((trip, i) => {
         const legs = trip.LegList.Leg;
         const { date, time } = legs[legs.length - 1].Destination;
-        // const { name } = legs[legs.length - 1].Origin;
-        // console.log(legs[legs.length - 1]);
-        const arrivalTime = Date.parse(`${date} ${time} GMT+0200`);
+        // All responses are in Sweden's timezone. This won't work in winter! :shock:
+        const arrivalTime = Date.parse(`${date}T${time}+0200`);
         return { arrivalTime, name: `Alt ${i}` };
       })
       .sort((a, b) => a.arrivalTime - b.arrivalTime);
