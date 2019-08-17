@@ -3,10 +3,10 @@ import "./Route.css";
 import { client } from "../../routes_backend/client.js";
 import { Alternatives } from "../Alternatives/Alternatives";
 
-const time = new Intl.DateTimeFormat("sv-SE", {
-  hour: "numeric",
-  minute: "numeric"
-});
+const noSeconds = {
+  hour: '2-digit',
+  minute: '2-digit',
+};
 
 function Stop({ stop, destination, active, onClick, children }) {
   return (
@@ -17,7 +17,7 @@ function Stop({ stop, destination, active, onClick, children }) {
     >
       <div className="StopName">
         <div>{stop.name}</div>
-        <div className="Time">{time.format(new Date(stop.departureTime))}</div>
+        <div className="Time">{new Date(stop.departureTime).toLocaleTimeString([], noSeconds)}</div>
       </div>
       <div className="VerticalAlignMiddle">
         <div className="Blob" />
