@@ -1,0 +1,8 @@
+# Config file for the API part of thundertrain
+
+# API keys
+gtfs_regional = "put-secret-here"
+gtfs_sverige_2 = "put-secret-here"
+resrobot_reseplanerare = "put-secret-here"
+resrobot_stolptabeller = "put-secret-here"
+trafikverket = "put-secret-here"

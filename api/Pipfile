@@ -10,6 +10,7 @@ requests = "*"
 flask = "*"
 sqlalchemy = "*"
 tornado = "*"
+python-dateutil = "*"
 
 [requires]
 python_version = "3.5"
