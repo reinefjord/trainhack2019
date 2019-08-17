@@ -11,6 +11,7 @@ function App() {
         <DataHandler>
           {({ stops, loading, fetchRoute, error }) => (
             <>
+              <h1>🚂🔥⛈</h1>
               <FindTrain onSubmit={fetchRoute} loading={loading} />
               {error ? <p>{error}</p> : null}
               {stops.length ? (
