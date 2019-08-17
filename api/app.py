@@ -52,8 +52,8 @@ class GetStopsAlongRouteHandler(BaseHandler):
 
         data = []
         for stop_time in stop_times:
-            arrival = (int(n) for n in stop_time.arrival_time.split(':'))
-            departure = (int(n) for n in stop_time.departure_time.split(':'))
+            arrival = [int(n) for n in stop_time.arrival_time.split(':')]
+            departure = [int(n) for n in stop_time.departure_time.split(':')]
 
             arrival_td = timedelta(hours=arrival[0],
                                    minutes=arrival[1],
