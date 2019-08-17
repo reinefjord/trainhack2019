@@ -1,6 +1,6 @@
 import { transformAlternatives } from "./client";
 
-const start = Date.parse('2017-08-23 11:31:00 GMT+0200');
+const start = Date.parse('2019-08-23 11:31:00 GMT+0200');
 
 export const baseTrip = {
   routeId: 'base-trip',
