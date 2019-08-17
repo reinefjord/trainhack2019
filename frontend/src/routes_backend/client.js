@@ -8,13 +8,16 @@ export function installClient(host) {
 }
 
 export function transformAlternatives({ Trip }) {
-  return !Trip ? [] : Trip.map(trip => {
-    const legs = trip.LegList.Leg;
-    const { date, time } = legs[legs.length - 1].Destination;
-    const { type } = legs[legs.length - 1].type;
-    const arrivalTime = Date.parse(`${date} ${time} GMT+0200`);
-    return { arrivalTime, type };
-  });
+  return !Trip
+    ? []
+    : Trip.map(trip => {
+        const legs = trip.LegList.Leg;
+        const { date, time } = legs[legs.length - 1].Destination;
+        const { name } = legs[legs.length - 1].Origin;
+        console.log(legs[legs.length - 1]);
+        const arrivalTime = Date.parse(`${date} ${time} GMT+0200`);
+        return { arrivalTime, type: trip.type, name };
+      });
 }
 
 class Client {

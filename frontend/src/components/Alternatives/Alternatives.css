@@ -1,8 +1,8 @@
 .AlternativeContainer {
-  width: 400px;
   position: absolute;
   background-color: #ebebe3;
   top: 0;
+  z-index: 10;
 }
 
 .Alternative {

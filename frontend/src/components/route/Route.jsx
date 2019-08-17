@@ -100,7 +100,7 @@ class AlternativeRouteInfo extends React.Component {
 
   render() {
     if (this.state.error) {
-      return <p className="Minutes" />;
+      return <p className="Minutes">{this.state.error}</p>;
     }
 
     if (!this.state.alternatives) {
