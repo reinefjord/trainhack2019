@@ -7,7 +7,7 @@ import * as serviceWorker from "./serviceWorker";
 // Connect to the real python backend by uncommenting the lines below,
 // replacing the domain as necessary.
 // import { installClient } from "./routes_backend/client";
-// installClient("http://localhost:4000");
+// installClient("http://localhost:1337");
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
