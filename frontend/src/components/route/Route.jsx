@@ -100,7 +100,7 @@ class AlternativeRouteInfo extends React.Component {
 
   render() {
     if (this.state.error) {
-      return <p className="Minutes">{String(this.state.error)}</p>;
+      return <p className="Minutes" />;
     }
 
     if (!this.state.alternatives) {
@@ -117,14 +117,18 @@ class AlternativeRouteInfo extends React.Component {
 
     const best = Math.min(Infinity, ...endTimes);
     const worst = Math.max(0, ...endTimes);
+    if (!this.state.alternatives.length) {
+      return null;
+    }
 
     return (
       <div className="Minutes">
-        <p>{alternatives(this.state.alternatives.length)}</p>
+        {/* {<p>{alternatives(this.state.alternatives.length)}</p>} */}
         {this.props.active && (
           <Alternatives
             alternatives={this.state.alternatives}
             orginialArrivalTime={orginialArrivalTime}
+            type={this.props.stop.type}
           />
         )}
         {!this.state.alternatives.length ? null : (

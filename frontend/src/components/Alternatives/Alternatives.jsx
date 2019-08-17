@@ -11,7 +11,7 @@ export const Alternatives = props => (
         delay={`${msToMin(
           alternative.arrivalTime - props.orginialArrivalTime
         )} min`}
-        title="This is our alternative"
+        title={alternative.type}
       />
     ))}
   </div>

@@ -11,8 +11,9 @@ export function transformAlternatives({ Trip }) {
   return !Trip ? [] : Trip.map(trip => {
     const legs = trip.LegList.Leg;
     const { date, time } = legs[legs.length - 1].Destination;
+    const { type } = legs[legs.length - 1].type;
     const arrivalTime = Date.parse(`${date} ${time} GMT+0200`);
-    return { arrivalTime };
+    return { arrivalTime, type };
   });
 }
 
