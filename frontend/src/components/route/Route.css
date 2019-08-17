@@ -3,20 +3,19 @@
   flex-direction: column;
   align-items: flex-end;
   position: relative;
-  margin-right: 25%;
+  width: 50%;
 }
 
 .Stop {
   display: flex;
   flex-direction: row;
   padding: 1em 0;
-  align-items: left;
   position: relative;
   cursor: pointer;
 }
 
 .Stop.active > .StopName {
-  transform: scale(1.3);
+  transform: scale(1.17);
 }
 
 .Stop.active .Blob {
@@ -68,7 +67,8 @@
   margin-left: 10px;
   text-align: left;
   font-size: 20px;
-  width: 70%;
+  width: 300px;
+  max-width: 45vw;
 }
 
 .VerticalAlignMiddle {

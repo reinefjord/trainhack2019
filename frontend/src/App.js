@@ -15,9 +15,10 @@ function App() {
               {error ? <p>{error}</p> : null}
               {stops.length ? (
                 <>
-                  <span>
-                    {stops[0].name} to {stops[stops.length - 1].name}
-                  </span>
+                  <h2>
+                    <b>{stops[0].name}</b> to{" "}
+                    <b>{stops[stops.length - 1].name}</b>
+                  </h2>
                   <Route stops={stops} />{" "}
                 </>
               ) : null}
