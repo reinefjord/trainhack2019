@@ -1,4 +1,4 @@
-# Thunder Train
+# Trainhack 2019 — Team Thunder Train
 
 This is a project for Trainhack 2019, going from Malmö to Berlin and back.
 
