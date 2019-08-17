@@ -8,7 +8,7 @@ export function installClient(host) {
 }
 
 export function transformAlternatives({ Trip }) {
-  return Trip.map(trip => {
+  return !Trip ? [] : Trip.map(trip => {
     const legs = trip.LegList.Leg;
     const { date, time } = legs[legs.length - 1].Destination;
     const arrivalTime = Date.parse(`${date} ${time} GMT+0200`);
