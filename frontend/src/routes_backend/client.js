@@ -12,12 +12,15 @@ export function transformAlternatives({ Trip }) {
     ? []
     : Trip.map((trip, i) => {
         const legs = trip.LegList.Leg;
+        const name = legs
+          .filter(leg => leg.type !== "WALK")
+          .map(leg => leg.name)
+          .join(" -> ");
         const { date, time } = legs[legs.length - 1].Destination;
         // All responses are in Sweden's timezone. This won't work in winter! :shock:
         const arrivalTime = Date.parse(`${date}T${time}+0200`);
-        return { arrivalTime, name: `Alt ${i}` };
-      })
-      .sort((a, b) => a.arrivalTime - b.arrivalTime);
+        return { arrivalTime, name };
+      }).sort((a, b) => a.arrivalTime - b.arrivalTime);
 }
 
 class Client {

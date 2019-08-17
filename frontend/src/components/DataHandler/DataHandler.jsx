@@ -6,7 +6,8 @@ export default class DataHandler extends React.Component {
     super(props);
     this.state = {
       stops: [],
-      isFetchingRoute: false
+      isFetchingRoute: false,
+      error: null
     };
 
     this.fetchRoute = this.fetchRoute.bind(this);
@@ -17,20 +18,29 @@ export default class DataHandler extends React.Component {
 
     this.setState({
       isFetchingRoute: true,
-      stops: []
+      stops: [],
+      error: null
     });
+    try {
+      const { stops } = await client.getStopsAlongRoute(trainId);
 
-    const { stops } = await client.getStopsAlongRoute(trainId);
-    this.setState({
-      stops,
-      isFetchingRoute: false
-    });
+      this.setState({
+        stops,
+        isFetchingRoute: false
+      });
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        error: "Something went south. But probably not the train.",
+        isFetchingRoute: false
+      });
+    }
   }
 
   render() {
     const { fetchRoute } = this;
     const { children } = this.props;
-    const { stops, isFetching } = this.state;
-    return <>{children({ stops, loading: isFetching, fetchRoute })}</>;
+    const { stops, isFetching, error } = this.state;
+    return <>{children({ stops, loading: isFetching, fetchRoute, error })}</>;
   }
 }

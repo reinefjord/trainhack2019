@@ -9,10 +9,10 @@ function App() {
     <div className="App">
       <header className="App-header">
         <DataHandler>
-          {({ stops, loading, fetchRoute }) => (
+          {({ stops, loading, fetchRoute, error }) => (
             <>
               <FindTrain onSubmit={fetchRoute} loading={loading} />
-
+              {error ? <p>{error}</p> : null}
               {stops.length ? (
                 <>
                   <span>
