@@ -3,10 +3,15 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { installClient } from "./routes_backend/client";
 
-// Connect to the real python backend by uncommenting the lines below,
+// Connect to API_HOST if defined
+if (process.env.API_HOST) {
+  installClient(process.env.API_HOST);
+}
+
+// Connect to a local python backend by uncommenting the lines below,
 // replacing the domain as necessary.
-// import { installClient } from "./routes_backend/client";
 // installClient("http://localhost:1337");
 
 ReactDOM.render(<App />, document.getElementById("root"));
