@@ -11,7 +11,17 @@ function App() {
         <DataHandler>
           {({ stops, loading, fetchRoute, error }) => (
             <>
-              <h1>🚂🔥⛈</h1>
+              <h1>
+                <span role="img" aria-label="train">
+                  🚂
+                </span>
+                <span role="img" aria-label="fire">
+                  🔥
+                </span>
+                <span role="img" aria-label="thunder rain cloud">
+                  ⛈
+                </span>
+              </h1>
               <FindTrain onSubmit={fetchRoute} loading={loading} />
               {error ? <p>{error}</p> : null}
               {stops.length ? (
