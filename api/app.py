@@ -106,9 +106,9 @@ class GetAlternativeRoutesHandler(BaseHandler):
 
 def make_app():
     return tornado.web.Application([
-        (r"/", MainHandler),
-        (r"/GetStopsAlongRoute", GetStopsAlongRouteHandler),
-        (r"/GetAlternativeRoutes", GetAlternativeRoutesHandler),
+        (r"/trainhack", MainHandler),
+        (r"/trainhack/GetStopsAlongRoute", GetStopsAlongRouteHandler),
+        (r"/trainhack/GetAlternativeRoutes", GetAlternativeRoutesHandler),
     ])
 
 
