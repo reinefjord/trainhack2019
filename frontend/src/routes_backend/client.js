@@ -15,7 +15,7 @@ export function transformAlternatives({ Trip }) {
         const name = legs
           .filter(leg => leg.type !== "WALK")
           .map(leg => leg.name)
-          .join(" -> ");
+          .join(" ➛ ");
         const { date, time } = legs[legs.length - 1].Destination;
         // All responses are in Sweden's timezone. This won't work in winter! :shock:
         const arrivalTime = Date.parse(`${date}T${time}+0200`);
