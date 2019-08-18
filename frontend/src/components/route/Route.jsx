@@ -75,10 +75,6 @@ export default class Route extends React.Component {
   }
 }
 
-function alternatives(n) {
-  return `${n || "no"} alternative${n === 1 ? "" : "s"}`;
-}
-
 class AlternativeRouteInfo extends React.Component {
   state = {
     alternatives: null,
