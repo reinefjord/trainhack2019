@@ -3,8 +3,9 @@ import "./Route.css";
 import { client } from "../../routes_backend/client.js";
 import { Alternatives } from "../Alternatives/Alternatives";
 
-const time = new Intl.DateTimeFormat(undefined, {
-  timeStyle: "short"
+const time = new Intl.DateTimeFormat("sv-SE", {
+  hour: "numeric",
+  minute: "numeric"
 });
 
 function Stop({ stop, destination, active, onClick, children }) {
@@ -133,7 +134,9 @@ class AlternativeRouteInfo extends React.Component {
             type={this.props.stop.type}
           />
         )}
-        <p>{best} ~ {worst} mins delay.</p>
+        <p>
+          {best} ~ {worst} mins delay.
+        </p>
       </div>
     );
   }
